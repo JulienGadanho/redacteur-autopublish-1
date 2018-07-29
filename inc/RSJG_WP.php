@@ -12,14 +12,19 @@ require_once( realpath( __DIR__ . '/../sdk-api-php/src/Exceptions.php' ) );
 class RSJGWP extends RSJGApiClient {
 	protected $mode = 'prod';
 	protected $available_services = array(
-		'check_api',
-		'check_added',
+		//		'check_api',
+		//		'check_added',
 		'categories',
 		'post',
-		'delete',
-		'fetch',
-		'update'
+		//		'delete',
+		//		'fetch',
+		//		'update'
 	);
+	
+	protected $author;
+	protected $service;
+	protected $params;
+	
 	
 	function __construct() {
 		parent::__construct();
@@ -43,12 +48,16 @@ class RSJGWP extends RSJGApiClient {
 	 * @param string $prefix Préfixe SQL pour les options
 	 */
 	public function wp_set_credentials( $prefix = 'rsjg_' ) {
-		$this->email      = get_option( $prefix . 'email' );
-		$this->api_key    = get_option( $prefix . 'api_key' );
-		$this->api_secret = get_option( $prefix . 'api_secret' );
+		$this->email      = ( defined( 'RSJG_EMAIL' ) ) ? RSJG_EMAIL : get_option( $prefix . 'email' );
+		$this->api_key    = ( defined( 'RSJG_API_KEY' ) ) ? RSJG_API_KEY : get_option( $prefix . 'api_key' );
+		$this->api_secret = ( defined( 'RSJG_API_SECRET' ) ) ? RSJG_API_SECRET : get_option( $prefix . 'api_secret' );
 		$this->author     = get_option( $prefix . 'author' );
 	}
 	
+	/**
+	 * @return bool
+	 * @throws PluginInactifException
+	 */
 	public function is_plugin_active() {
 		$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
 		
@@ -61,9 +70,13 @@ class RSJGWP extends RSJGApiClient {
 		throw new PluginInactifException();
 	}
 	
+	/**
+	 * @return bool
+	 * @throws \Exception
+	 */
 	protected function check_request() {
 		if ( ! isset( $_GET['method'] ) ) {
-			return true;
+			return false;
 		}
 		
 		$service = $_GET['method'];
@@ -79,6 +92,8 @@ class RSJGWP extends RSJGApiClient {
 		$this->check_signature( $service, $params );
 		
 		$this->$service( $params );
+		
+		return true;
 	}
 	
 	public function site_add( $url = null, $cms = null, $endpoint = null ) {
@@ -108,33 +123,33 @@ class RSJGWP extends RSJGApiClient {
 		return json_decode( $res['body'] );
 	}
 	
-	public function check_added( $params ) {
-		$args = array(
-			'post__not_in'        => get_option( "sticky_posts" ),
-			'ignore_sticky_posts' => 1,
-			'meta_query'          => array(
-				array(
-					'key'     => get_option( 'rsjg_url_field', true ),
-					'value'   => $params['url'],
-					'compare' => '=',
-				)
-			)
-		);
-		
-		$meta_query = new WP_Query( $args );
-		if ( $meta_query->have_posts() ) {
-			while( $meta_query->have_posts() ) {
-				$meta_query->the_post();
-				echo json_encode( array( 'status' => 'found', 'url' => get_permalink() ) );
-				die();
-			}
-		} else {
-			echo json_encode( array( 'status' => 'not_found' ) );
-			die();
-		}
-	}
+	//	public function check_added( $params ) {
+	//		$args = array(
+	//			'post__not_in'        => get_option( "sticky_posts" ),
+	//			'ignore_sticky_posts' => 1,
+	//			'meta_query'          => array(
+	//				array(
+	//					'key'     => get_option( 'rsjg_url_field', true ),
+	//					'value'   => $params['url'],
+	//					'compare' => '=',
+	//				)
+	//			)
+	//		);
+	//
+	//		$meta_query = new WP_Query( $args );
+	//		if ( $meta_query->have_posts() ) {
+	//			while( $meta_query->have_posts() ) {
+	//				$meta_query->the_post();
+	//				echo json_encode( array( 'status' => 'found', 'url' => get_permalink() ) );
+	//				die();
+	//			}
+	//		} else {
+	//			echo json_encode( array( 'status' => 'not_found' ) );
+	//			die();
+	//		}
+	//	}
 	
-	public function categories( $params ) {
+	public function categories() {
 		$ret        = array();
 		$categories = get_categories( array(
 			'taxonomy'   => 'category',
@@ -149,12 +164,12 @@ class RSJGWP extends RSJGApiClient {
 		echo json_encode( $ret );
 	}
 	
-	public function test() {
-		$res = $this->request( 'test' );
-		
-		echo json_encode( $res );
-		die();
-	}
+	//	public function test() {
+	//		$res = $this->request( 'test' );
+	//
+	//		echo json_encode( $res );
+	//		die();
+	//	}
 	
 	public function post( $params ) {
 		
@@ -186,7 +201,7 @@ class RSJGWP extends RSJGApiClient {
 			
 			add_post_meta( $post_ID, '_rsjg_task_id', $params['task_id'], true );
 			
-			if ( isset( $params['image'] ) ) {
+			if ( isset( $params['image'] ) && '' !== $params['image'] ) {
 				$this->set_featured_image( $params['image'], $post_ID );
 			}
 			
@@ -244,41 +259,46 @@ class RSJGWP extends RSJGApiClient {
 		return $id;
 	}
 	
-	public function fetch( $params ) {
-		header( 'Content-Type: application/json' );
-		
-		$task_ID = $params['task_id'];
-		$url     = $params['url'];
-		$post    = false;
-		
-		if ( ! is_numeric( $task_ID ) && strlen( $url ) < 5 ) {
-			echo json_encode( array( 'status' => 'error', 'message' => 'wrong parameters' ) );
-			
-			return false;
-		}
-		
-		// get post by task_id
-		if ( is_numeric( $task_ID ) ) {
-			$post = $this->get_post_by_task_id( $task_ID );
-		}
-		if ( ! $post ) {
-			$post = $this->get_post_by_url( $url );
-		}
-		
-		if ( ! $post ) {
-			echo json_encode( array( 'status' => 'error', 'message' => 'no posts' ) );
-			
-			return false;
-		}
-		
-		echo json_encode( $post );
-		die();
-	}
+	//	public function fetch( $params ) {
+	//		header( 'Content-Type: application/json' );
+	//
+	//		$task_ID = $params['task_id'];
+	//		$url     = $params['url'];
+	//		$post    = false;
+	//
+	//		if ( ! is_numeric( $task_ID ) && strlen( $url ) < 5 ) {
+	//			echo json_encode( array( 'status' => 'error', 'message' => 'wrong parameters' ) );
+	//
+	//			return false;
+	//		}
+	//
+	//		// get post by task_id
+	//		if ( is_numeric( $task_ID ) ) {
+	//			$post = $this->get_post_by_task_id( $task_ID );
+	//		}
+	//		if ( ! $post ) {
+	//			$post = $this->get_post_by_url( $url );
+	//		}
+	//
+	//		if ( ! $post ) {
+	//			echo json_encode( array( 'status' => 'error', 'message' => 'no posts' ) );
+	//
+	//			return false;
+	//		}
+	//
+	//		echo json_encode( $post );
+	//		die();
+	//	}
 	
+	/**
+	 * @param $task_ID
+	 *
+	 * @return bool|\WP_Post
+	 */
 	private function get_post_by_task_id( $task_ID ) {
 		$loop = new \WP_Query( array(
 			'ignore_sticky_posts' => 1,
-			'meta_key'            => '_soumettre_task_id',
+			'meta_key'            => '_rsjg_task_id',
 			'meta_value'          => $task_ID
 		) );
 		if ( ! $loop->have_posts() ) {
@@ -292,83 +312,83 @@ class RSJGWP extends RSJGApiClient {
 		return $post;
 	}
 	
-	private function get_post_by_url( $url ) {
-		$post_id = url_to_postid( $url );
-		$post    = get_post( $post_id );
-		
-		return $post;
-	}
+	//	private function get_post_by_url( $url ) {
+	//		$post_id = url_to_postid( $url );
+	//		$post    = get_post( $post_id );
+	//
+	//		return $post;
+	//	}
 	
-	public function update( $params ) {
-		header( 'Content-Type: application/json' );
-		
-		$task_ID = $params['task_id'];
-		$url     = $params['url'];
-		$post    = false;
-		
-		if ( ! is_numeric( $task_ID ) && strlen( $url ) < 5 ) {
-			echo json_encode( array( 'status' => 'error', 'message' => 'wrong parameters' ) );
-			
-			return false;
-		}
-		
-		// get post by task_id
-		if ( is_numeric( $task_ID ) ) {
-			$post = $this->get_post_by_task_id( $task_ID );
-		}
-		if ( ! $post ) {
-			$post = $this->get_post_by_url( $url );
-		}
-		
-		$post->post_title   = stripslashes( $params['title'] );
-		$post->post_content = stripslashes( $params['editedContent'] );
-		
-		if ( wp_update_post( $post ) ) {
-			echo json_encode( array( 'status' => 'ok' ) );
-			die();
-		}
-		
-		echo json_encode( array( 'status' => 'error', 'message' => 'no_update' ) );
-		die();
-	}
+	//	public function update( $params ) {
+	//		header( 'Content-Type: application/json' );
+	//
+	//		$task_ID = $params['task_id'];
+	//		$url     = $params['url'];
+	//		$post    = false;
+	//
+	//		if ( ! is_numeric( $task_ID ) && strlen( $url ) < 5 ) {
+	//			echo json_encode( array( 'status' => 'error', 'message' => 'wrong parameters' ) );
+	//
+	//			return false;
+	//		}
+	//
+	//		// get post by task_id
+	//		if ( is_numeric( $task_ID ) ) {
+	//			$post = $this->get_post_by_task_id( $task_ID );
+	//		}
+	//		if ( ! $post ) {
+	//			$post = $this->get_post_by_url( $url );
+	//		}
+	//
+	//		$post->post_title   = stripslashes( $params['title'] );
+	//		$post->post_content = stripslashes( $params['editedContent'] );
+	//
+	//		if ( wp_update_post( $post ) ) {
+	//			echo json_encode( array( 'status' => 'ok' ) );
+	//			die();
+	//		}
+	//
+	//		echo json_encode( array( 'status' => 'error', 'message' => 'no_update' ) );
+	//		die();
+	//	}
 	
-	protected function set_directorypress_image_fields( $image_url, $post_id ) {
-		$upload_dir = wp_upload_dir();
-		$image_data = file_get_contents( $image_url );
-		$filename   = basename( $image_url );
-		if ( wp_mkdir_p( $upload_dir['path'] ) ) {
-			$file = $upload_dir['path'] . '/' . $filename;
-		} else {
-			$file = $upload_dir['basedir'] . '/' . $filename;
-		}
-		file_put_contents( $file, $image_data );
-		
-		if ( wp_mkdir_p( $upload_dir['path'] ) ) {
-			$image_url = get_home_url() . $upload_dir['path'] . '/' . $filename;
-		} else {
-			$image_url = get_home_url() . $upload_dir['basedir'] . '/' . $filename;
-		}
-		
-		add_post_meta( $post_id, 'image', $image_url, true );
-	}
+	//	protected function set_directorypress_image_fields( $image_url, $post_id ) {
+	//		$upload_dir = wp_upload_dir();
+	//		$image_data = file_get_contents( $image_url );
+	//		$filename   = basename( $image_url );
+	//		if ( wp_mkdir_p( $upload_dir['path'] ) ) {
+	//			$file = $upload_dir['path'] . '/' . $filename;
+	//		} else {
+	//			$file = $upload_dir['basedir'] . '/' . $filename;
+	//		}
+	//		file_put_contents( $file, $image_data );
+	//
+	//		if ( wp_mkdir_p( $upload_dir['path'] ) ) {
+	//			$image_url = get_home_url() . $upload_dir['path'] . '/' . $filename;
+	//		} else {
+	//			$image_url = get_home_url() . $upload_dir['basedir'] . '/' . $filename;
+	//		}
+	//
+	//		add_post_meta( $post_id, 'image', $image_url, true );
+	//	}
 	
-	protected function check_api() {
-		$default_headers = array(
-			'Name'        => 'Plugin Name',
-			'PluginURI'   => 'Plugin URI',
-			'Version'     => 'Version',
-			'Description' => 'Description',
-			'Author'      => 'Author',
-			'AuthorURI'   => 'Author URI',
-			'TextDomain'  => 'Text Domain',
-			'DomainPath'  => 'Domain Path',
-			'Network'     => 'Network',
-			'_sitewide'   => 'Site Wide Only',
-		);
-		
-		$plugin_data = get_file_data( dirname( __FILE__ ) . '/../redacteur-autopublish.php', $default_headers, 'plugin' );
-		
-		header( 'Content-Type: application/json' );
-		echo json_encode( array( 'status' => 'ok', 'version' => $plugin_data['Version'] ) );
-	}
+	//	protected function check_api() {
+	//		$default_headers = array(
+	//			'Name'        => 'Plugin Name',
+	//			'PluginURI'   => 'Plugin URI',
+	//			'Version'     => 'Version',
+	//			'Description' => 'Description',
+	//			'Author'      => 'Author',
+	//			'AuthorURI'   => 'Author URI',
+	//			'TextDomain'  => 'Text Domain',
+	//			'DomainPath'  => 'Domain Path',
+	//			'Network'     => 'Network',
+	//			'_sitewide'   => 'Site Wide Only',
+	//		);
+	//
+	//		$plugin_data = get_file_data( dirname( __FILE__ ) . '/../redacteur-autopublish.php', $default_headers, 'plugin' );
+	//
+	//		header( 'Content-Type: application/json' );
+	//		echo json_encode( array( 'status' => 'ok', 'version' => $plugin_data['Version'] ) );
+	//	}
 }

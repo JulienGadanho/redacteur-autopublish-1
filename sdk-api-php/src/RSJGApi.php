@@ -14,7 +14,7 @@ class RSJGApi extends RSJGApiClient implements RSJGServices
         'delete',
     );
 
-    public function __construct($mode = 'prod', $api_email = SOUMETTRE_API_EMAIL, $api_key = SOUMETTRE_API_KEY, $api_secret = SOUMETTRE_API_SECRET)
+    public function __construct($mode = 'prod', $api_email = RSJG_API_EMAIL, $api_key = RSJG_API_KEY, $api_secret = RSJG_API_SECRET)
     {
         parent::__construct($api_email, $api_key, $api_secret);
 
@@ -24,7 +24,7 @@ class RSJGApi extends RSJGApiClient implements RSJGServices
 
     protected function check_request()
     {
-        $service = str_replace(SOUMETTRE_API_URL, '', strtok($_SERVER["REQUEST_URI"], '?'));
+        $service = str_replace(RSJG_API_URL, '', strtok($_SERVER["REQUEST_URI"], '?'));
         $params = ($this->mode == 'test') ? $_GET : $_POST;
 
         if (!in_array($service, $this->available_services)) {

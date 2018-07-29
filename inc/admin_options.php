@@ -3,10 +3,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
 
-$api_key    = get_option( $this->prefix . 'api_key' );
-$api_secret = get_option( $this->prefix . 'api_secret' );
-$email      = get_option( $this->prefix . 'email' );
+$api_key    = ( defined( 'RSJG_API_KEY' ) ) ? RSJG_API_KEY : get_option( $this->prefix . 'api_key' );
+$api_secret = ( defined( 'RSJG_API_SECRET' ) ) ? RSJG_API_SECRET : get_option( $this->prefix . 'api_secret' );
+$email      = ( defined( 'RSJG_EMAIL' ) ) ? RSJG_EMAIL : get_option( $this->prefix . 'email' );
 $plugin_url = get_option( $this->prefix . 'plugin_url' );
+
 if ( ! $plugin_url ) {
 	$plugin_url = $this->plugin_url;
 }
@@ -41,7 +42,7 @@ if ( ! $plugin_url ) {
 		<tr valign="top">
 			<th scope="row">Email</th>
 			<td>
-				<input type="text" id="rsjg_email" name="email" value="<?= esc_attr( $email ); ?>"
+				<input type="text" id="rsjg_email" name="email" value="<?= esc_attr( $email ); ?>" <?php if ( defined( 'RSJG_EMAIL' ) ) echo 'disabled'; ?>
 							 class="regular-text ltr"/>
 				<p class="description">
 					Entrez l'adresse email qui correspond à votre compte utilisateur sur
@@ -52,7 +53,7 @@ if ( ! $plugin_url ) {
 		<tr valign="top">
 			<th scope="row">API Key</th>
 			<td>
-				<input type="text" id="rsjg_api_key" name="api_key" value="<?= esc_attr( $api_key ); ?>"
+				<input type="text" id="rsjg_api_key" name="api_key" value="<?= esc_attr( $api_key ); ?>" <?php if ( defined( 'RSJG_API_KEY' ) ) echo 'disabled'; ?>
 							 class="regular-text ltr"/>
 			</td>
 			<td></td>
@@ -60,7 +61,7 @@ if ( ! $plugin_url ) {
 		<tr valign="top">
 			<th scope="row">API Secret</th>
 			<td>
-				<input type="text" id="rsjg_api_secret" name="api_secret" value="<?= esc_attr( $api_secret ); ?>"
+				<input type="text" id="rsjg_api_secret" name="api_secret" value="<?= esc_attr( $api_secret ); ?>" <?php if ( defined( 'RSJG_API_SECRET' ) ) echo 'disabled'; ?>
 							 class="regular-text ltr"/>
 				<p class="description">
 					Vos identifiants API sont disponibles

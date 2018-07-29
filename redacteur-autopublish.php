@@ -90,7 +90,7 @@ class RSJG_Admin
     {
         add_menu_page(
             __('Autopulish Redacteur.site', 'redacteur-autopublish'),
-            __('Autopublish', 'redacteur-autopublish'),
+            _x('Autopublish', 'Menu name', 'redacteur-autopublish'),
             'manage_options',
             'rsjg-autopublish',
             array($this, 'admin_page'),
