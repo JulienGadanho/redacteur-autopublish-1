@@ -1,13 +1,13 @@
-=== Soumettre WP Partner ===
-Contributors: dsampaolo
-Tags: seo, netlinking, linkbuilding
+=== Redacteur.site Autopublish ===
+Contributors: DoudouMoii
+Tags: seo, redaction
 Requires at least: 4.6
 Tested up to: 4.7
-Stable tag: 4.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin allows our Partners to receive new submissions and earn money.
+# A modifier
+This plugin allows website to publish text from redacteur.site
 
 == Description ==
 
@@ -32,9 +32,3 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 2. This is the second screen shot
 
 == Changelog ==
-
-= 1.4.2 =
-* Code improvements (as suggested by Wordpress team)
-
-= 1.4 =
-* First version on Wordpress plugins directory

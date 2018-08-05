@@ -11,27 +11,30 @@ $plugin_url = get_option( $this->prefix . 'plugin_url' );
 if ( ! $plugin_url ) {
 	$plugin_url = $this->plugin_url;
 }
+
+$plateform_link = sprintf(
+	'<a href="http://redacteur.site" target="_blank" rel="noreferrer noopener">%1$s</a>',
+	_x( 'Redacteur.site', 'Plateform name', 'redacteur-autopublish' )
+);
+
+
 ?>
 <div class="wrap">
 	
 	<h1><?php _e( 'Redacteur.site Autopublish', 'redacteur-autopublish' ); ?></h1>
 	
 	<div class="notice notice-info">
-			<?php
-			$text = sprintf(
-					__( 'This plugin allow to add your website on %s to autopublish writers text.', 'redacteur-autopublish' ),
-					_x( 'http://redacteur.site', 'Plateform home URL', 'redacteur-autopublish' )
-			);
-			?>
-		<p><?php echo $text; ?></p>
+		<p>
+		<?php
+		printf( __( 'This plugin allow to add your website on %s to autopublish writers text.', 'redacteur-autopublish' ), $plateform_link );
+		?>
+		</p>
 		<p><?php _e( 'Une fois votre plugin configuré, votre site sera ajouté à notre liste de Sites Partenaires. Afin de pouvoir commencer à recevoir des articles rémunérés, vous devrez passer sur la plate-forme pour renseigner les thématiques de votre site.', 'redacteur-autopublish' ); ?></p>
 	</div>
 	
 	<div class="notice notice-success">
-		<p>
-			Si vous n'avez pas encore de compte sur <a target="_blank" href="https://soumettre.fr/">Soumettre.fr</a>,
-			vous devez en créer un.
-		</p>
+		<p><?php printf( __( 'Si vous n\'avez pas encore de compte sur %s, vous devez en créer un.', 'redacteur-autopublish' ), $plateform_link ); ?></p>
+		
 		<p>
 			Vos identifiants API sont disponibles ici : <a target="_blank" href="https://soumettre.fr/user/profile">Récupérer
 				mes identifiants API</a>.
@@ -42,7 +45,9 @@ if ( ! $plugin_url ) {
 		<tr valign="top">
 			<th scope="row">Email</th>
 			<td>
-				<input type="text" id="rsjg_email" name="email" value="<?= esc_attr( $email ); ?>" <?php if ( defined( 'RSJG_EMAIL' ) ) echo 'disabled'; ?>
+				<input type="text" id="rsjg_email" name="email" value="<?= esc_attr( $email ); ?>" <?php if ( defined( 'RSJG_EMAIL' ) ) {
+			echo 'disabled';
+		} ?>
 							 class="regular-text ltr"/>
 				<p class="description">
 					Entrez l'adresse email qui correspond à votre compte utilisateur sur
@@ -53,7 +58,9 @@ if ( ! $plugin_url ) {
 		<tr valign="top">
 			<th scope="row">API Key</th>
 			<td>
-				<input type="text" id="rsjg_api_key" name="api_key" value="<?= esc_attr( $api_key ); ?>" <?php if ( defined( 'RSJG_API_KEY' ) ) echo 'disabled'; ?>
+				<input type="text" id="rsjg_api_key" name="api_key" value="<?= esc_attr( $api_key ); ?>" <?php if ( defined( 'RSJG_API_KEY' ) ) {
+			echo 'disabled';
+		} ?>
 							 class="regular-text ltr"/>
 			</td>
 			<td></td>
@@ -61,7 +68,9 @@ if ( ! $plugin_url ) {
 		<tr valign="top">
 			<th scope="row">API Secret</th>
 			<td>
-				<input type="text" id="rsjg_api_secret" name="api_secret" value="<?= esc_attr( $api_secret ); ?>" <?php if ( defined( 'RSJG_API_SECRET' ) ) echo 'disabled'; ?>
+				<input type="text" id="rsjg_api_secret" name="api_secret" value="<?= esc_attr( $api_secret ); ?>" <?php if ( defined( 'RSJG_API_SECRET' ) ) {
+			echo 'disabled';
+		} ?>
 							 class="regular-text ltr"/>
 				<p class="description">
 					Vos identifiants API sont disponibles
@@ -76,7 +85,11 @@ if ( ! $plugin_url ) {
 				Auteur
 			</th>
 			<td>
-		  <?php wp_dropdown_users( array( 'name' => 'author', 'selected' => get_option( 'rsjg_author' ) ) ); ?>
+		  <?php wp_dropdown_users( array(
+			  'show_option_none' => __( 'Random user', 'rsjg-autopublish' ),
+			  'name'             => 'author',
+			  'selected'         => get_option( 'rsjg_author' )
+		  ) ); ?>
 				<p class="description">Quel Auteur associer aux posts de Soumettre ?</p>
 			</td>
 		</tr>
