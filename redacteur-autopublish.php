@@ -3,7 +3,7 @@
  * Plugin Name:       Redacteur.site Autopublish
  * Plugin URI:        http://www.redacteur.site/wordpress/
  * Description:       Autopublish from http://www.redacteur.site/
- * Version:           0.2
+ * Version:           0.3
  * Author:            Julien Gadanho
  * Author URI:        https://www.securemydata.fr/
  * License:           GPL-2.0+

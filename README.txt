@@ -31,5 +31,8 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Changelog ==
 
+= 0.3 =
+* Version stable mais avec les infos locales
+
 = 0.2 =
 * Ajout de la traduction
