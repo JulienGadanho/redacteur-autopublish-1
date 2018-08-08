@@ -1,12 +1,10 @@
 === Redacteur.site Autopublish ===
 Contributors: DoudouMoii
 Tags: seo, redaction
-Requires at least: 4.6
-Tested up to: 4.7
+Requires at least: 4.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-# A modifier
 This plugin allows website to publish text from redacteur.site
 
 == Description ==
@@ -32,3 +30,6 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 2. This is the second screen shot
 
 == Changelog ==
+
+= 0.2 =
+* Ajout de la traduction

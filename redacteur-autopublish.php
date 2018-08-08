@@ -3,7 +3,7 @@
  * Plugin Name:       Redacteur.site Autopublish
  * Plugin URI:        http://www.redacteur.site/wordpress/
  * Description:       Autopublish from http://www.redacteur.site/
- * Version:           0.1
+ * Version:           0.2
  * Author:            Julien Gadanho
  * Author URI:        https://www.securemydata.fr/
  * License:           GPL-2.0+
@@ -46,6 +46,19 @@ class RSJG_Admin {
 		// ajax
 		add_action( 'admin_footer', array( $this, 'ajax' ) );
 		add_action( 'wp_ajax_rsjg_save_options', array( $this, 'ajax_save_options' ) );
+	  
+	  /**
+	   * Mise à jour auto du plugin
+	   */
+	  require plugin_dir_path( __FILE__ ) . 'lib/plugin-update-checker/plugin-update-checker.php';
+	  $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+		  'https://github.com/DoudouMoii/redacteur-autopublish/',
+		  __FILE__,
+		  'redacteur-autopublish'
+	  );
+	  
+	  //Optional: Set the branch that contains the stable release.
+	  $myUpdateChecker->setBranch('master');
 		
 	}
 	
@@ -140,3 +153,5 @@ class RSJG_Admin {
 			</script> <?php
 	}
 }
+
+
