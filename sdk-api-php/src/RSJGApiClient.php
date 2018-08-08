@@ -42,8 +42,8 @@ class RSJGApiClient {
 	/**
 	 * Envoie une requête signée
 	 *
-	 * @param string $endpoint Service à appeler (ex: site/register)
-	 * @param array $params
+	 * @param string $service
+	 * @param array $post_params
 	 *
 	 * @return object Réponse en JSON
 	 */

@@ -1,0 +1,180 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: Redacteur.site Autopublish\n"
+"POT-Creation-Date: 2018-08-08 06:27+0200\n"
+"PO-Revision-Date: 2018-08-08 06:27+0200\n"
+"Last-Translator: Etienne Mommalier <wordpress@mommalier.fr>\n"
+"Language-Team: Etienne Mommalier <wordpress@mommalier.fr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.1.1\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: redacteur-autopublish.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: inc/admin_options.php:15
+msgctxt "Plateform name"
+msgid "Redacteur.site"
+msgstr ""
+
+#: inc/admin_options.php:17
+msgid "Get my API credentials"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+#: inc/admin_options.php:23
+msgid "Redacteur.site Autopublish"
+msgstr ""
+
+#: inc/admin_options.php:28
+#, php-format
+msgctxt "Plateform link"
+msgid ""
+"This plugin allow to add your website on %s to autopublish writers text."
+msgstr ""
+
+#: inc/admin_options.php:34
+#, php-format
+msgctxt "Plateform link"
+msgid "You must create an account on %s"
+msgstr ""
+
+#: inc/admin_options.php:37
+#, php-format
+msgctxt "profile link"
+msgid "You can create your API credentials here: %s"
+msgstr ""
+
+#: inc/admin_options.php:42
+msgctxt "Form label"
+msgid "Email"
+msgstr ""
+
+#: inc/admin_options.php:44
+msgid "Your email"
+msgstr ""
+
+#: inc/admin_options.php:45
+#, php-format
+msgctxt "Plateform link"
+msgid "Enter your email address used on %s"
+msgstr ""
+
+#: inc/admin_options.php:49
+msgctxt "Form label"
+msgid "API Key"
+msgstr ""
+
+#: inc/admin_options.php:51
+msgid "Your API key"
+msgstr ""
+
+#: inc/admin_options.php:56
+msgctxt "Form label"
+msgid "API Secret"
+msgstr ""
+
+#: inc/admin_options.php:58
+msgid "Your API secret"
+msgstr ""
+
+#: inc/admin_options.php:64
+msgctxt "Form label"
+msgid "Author"
+msgstr ""
+
+#: inc/admin_options.php:68
+msgid "Random user"
+msgstr ""
+
+#: inc/admin_options.php:72
+msgid "Which author to associate with published posts"
+msgstr ""
+
+#: inc/admin_options.php:82 inc/admin_options.php:83
+msgid "Save Changes"
+msgstr ""
+
+#: inc/admin_options.php:86
+#, php-format
+msgctxt "Plateform link"
+msgid "This button saves your updates and records your site on %s"
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p4/Plugin/Ui.php:54
+msgid "View details"
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p4/Plugin/Ui.php:77
+#, php-format
+msgid "More information about %s"
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p4/Plugin/Ui.php:128
+msgid "Check for updates"
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p4/Plugin/Ui.php:213
+#, php-format
+msgctxt "the plugin title"
+msgid "The %s plugin is up to date."
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p4/Plugin/Ui.php:215
+#, php-format
+msgctxt "the plugin title"
+msgid "A new version of the %s plugin is available."
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p4/Plugin/Ui.php:217
+#, php-format
+msgctxt "the plugin title"
+msgid "Could not determine if updates are available for %s."
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p4/Plugin/Ui.php:223
+#, php-format
+msgid "Unknown update checker status \"%s\""
+msgstr ""
+
+#: lib/plugin-update-checker/Puc/v4p4/Vcs/PluginUpdateChecker.php:98
+msgid "There is no changelog available."
+msgstr ""
+
+#: redacteur-autopublish.php:86
+msgid "Autopulish Redacteur.site"
+msgstr ""
+
+#: redacteur-autopublish.php:86
+msgctxt "Menu name"
+msgid "Autopublish"
+msgstr ""
+
+#: redacteur-autopublish.php:95
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "http://www.redacteur.site/wordpress/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid "Autopublish from http://www.redacteur.site/"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Julien Gadanho"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://www.securemydata.fr/"
+msgstr ""

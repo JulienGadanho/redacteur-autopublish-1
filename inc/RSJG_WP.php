@@ -9,19 +9,43 @@ require_once( realpath( __DIR__ . '/../sdk-api-php/src/RSJGApiClient.php' ) );
 require_once( realpath( __DIR__ . '/../sdk-api-php/src/RSJGApi.php' ) );
 require_once( realpath( __DIR__ . '/../sdk-api-php/src/Exceptions.php' ) );
 
+/**
+ * Class RSJGWP
+ * @package RSJG
+ */
 class RSJGWP extends RSJGApiClient {
+	
+	/**
+	 * @var string
+	 */
 	protected $mode = 'prod';
+	
+	/**
+	 * @var array
+	 */
 	protected $available_services = array(
 		'authors',      // A venir
 		'categories',
 		'post',
 	);
 	
+	/**
+	 * @var
+	 */
 	protected $author;
+	/**
+	 * @var
+	 */
 	protected $service;
+	/**
+	 * @var
+	 */
 	protected $params;
 	
 	
+	/**
+	 * RSJGWP constructor.
+	 */
 	function __construct() {
 		parent::__construct();
 		
@@ -39,7 +63,7 @@ class RSJGWP extends RSJGApiClient {
 	}
 	
 	/**
-	 * Charge les credentials depuis la base de données (utilisé par Wordpress)
+	 * Charge les credentials depuis la base de données ou les constantes (utilisé par Wordpress)
 	 *
 	 * @param string $prefix Préfixe SQL pour les options
 	 */
@@ -67,6 +91,7 @@ class RSJGWP extends RSJGApiClient {
 	}
 	
 	/**
+	 * Vérifie une requete
 	 * @return bool
 	 * @throws \Exception
 	 */
@@ -92,6 +117,15 @@ class RSJGWP extends RSJGApiClient {
 		return true;
 	}
 	
+	/**
+	 * Ajout d'un site sur la plateforme
+	 *
+	 * @param null $url
+	 * @param null $cms
+	 * @param null $endpoint
+	 *
+	 * @return array|mixed|object
+	 */
 	public function site_add( $url = null, $cms = null, $endpoint = null ) {
 		$params = array(
 			'url' => $url,
@@ -107,6 +141,14 @@ class RSJGWP extends RSJGApiClient {
 		return $res;
 	}
 	
+	/**
+	 * Execute une requete
+	 *
+	 * @param string $service
+	 * @param array $post_params
+	 *
+	 * @return array|mixed|object
+	 */
 	public function request( $service, $post_params = array() ) {
 		$endpoint    = $this->endpoint . $service;
 		$post_params = $this->sign( $service, $post_params );
@@ -119,6 +161,9 @@ class RSJGWP extends RSJGApiClient {
 		return json_decode( $res['body'] );
 	}
 	
+	/**
+	 * Envoie la liste des catégories
+	 */
 	public function categories() {
 		$ret        = array();
 		$categories = get_categories( array(
@@ -133,6 +178,11 @@ class RSJGWP extends RSJGApiClient {
 		echo json_encode( $ret );
 	}
 	
+	/**
+	 * Créé un post
+	 *
+	 * @param $params
+	 */
 	public function post( $params ) {
 		
 		if ( isset( $params['draft'] ) ) {
@@ -153,7 +203,7 @@ class RSJGWP extends RSJGApiClient {
 		);
 		
 		if ( '-1' == $post_arr['post_author'] ) {
-			$rand_user = $this->get_random_user();
+			$rand_user               = $this->get_random_user();
 			$post_arr['post_author'] = $rand_user->ID;
 		}
 		
@@ -184,11 +234,87 @@ class RSJGWP extends RSJGApiClient {
 		}
 	}
 	
-	protected function set_featured_image( $image_url, $post_id ) {
-		$id_attachment = $this->import_image( $image_url, $post_id );
-		if ( ! is_wp_error( $id_attachment ) ) {
-			set_post_thumbnail( $post_id, $id_attachment );
+	/**
+	 * Retourne un utilisateur aléatoire
+	 *
+	 * @return \WP_User
+	 */
+	protected function get_random_user() {
+		$all_users      = get_users();
+		$specific_users = array();
+		
+		$exclude_users = apply_filters( 'rsjg_exclude_random_users', array() );
+		
+		foreach ( $all_users as $user ) {
+			
+			if ( $user->has_cap( 'publish_posts' ) && ! in_array( $user->ID, $exclude_users ) ) {
+				$specific_users[] = $user;
+			}
 		}
+		
+		return $specific_users[ array_rand( $specific_users ) ];
+	}
+	
+	/**
+	 * Transforme les URL d'images vers des balises <img>
+	 *
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+	protected function transfrom_img_src( $args ) {
+		$extensions_to_import = apply_filters( 'rsjg_images_extensions', [
+			'jpg',
+			'png',
+			'gif',
+			'jpeg',
+			'webp',
+		] );
+		
+		$patten_image = '#[^\'"](https?://.*[\.](?:' . implode( '|', $extensions_to_import ) . '))[^\'"]#i';
+		preg_match_all( $patten_image, $args['post_content'], $matches, PREG_SET_ORDER );
+		$image_format_html = "<img class=\"aligncenter\" src=\"%s\">";
+		
+		foreach ( $matches as $image ) {
+			$img_html             = sprintf( $image_format_html, $image[1] );
+			$args['post_content'] = str_replace( $image[0], $img_html, $args['post_content'] );
+		}
+		
+		return $args;
+	}
+	
+	/**
+	 * Import d'image en HTML
+	 *
+	 * @param int $post_id
+	 */
+	protected function import_html_images( $post_id ) {
+		
+		$post = get_post( $post_id );
+		if ( is_wp_error( $post ) || is_null( $post ) ) {
+			return;
+		}
+		
+		$content = $post->post_content;
+		$count   = preg_match_all( '#<img.*?src=[\'"](.*?)[\'"].*?>#i', $content, $matches, PREG_SET_ORDER );
+		if ( false === $count || 0 === $count ) {
+			return;
+		}
+		
+		foreach ( $matches as $image ) {
+			// SRC de l'image = $image[1]
+			$attachment_id = $this->import_image( $image[1], $post_id );
+			if ( $attachment_id > 0 ) {
+				$new_img_url = wp_get_attachment_url( $attachment_id );
+				$content     = str_replace( $image[1], $new_img_url, $content );
+			}
+		}
+		wp_update_post( [
+			'ID'           => $post_id,
+			'post_content' => $content
+		] );
+		
+		return;
 	}
 	
 	/**
@@ -233,59 +359,26 @@ class RSJGWP extends RSJGApiClient {
 	}
 	
 	/**
-	 * @param int           $post_id
+	 * Ajout d'une image à la une
+	 *
+	 * @param $image_url
+	 * @param $post_id
 	 */
-	private function import_html_images( $post_id ) {
-		
-		$post = get_post( $post_id );
-		if ( is_wp_error( $post ) || is_null( $post ) ) return;
-		
-		$content = $post->post_content;
-		$count = preg_match_all( '#<img.*?src=[\'"](.*?)[\'"].*?>#i', $content, $matches, PREG_SET_ORDER );
-		if ( false === $count || 0 === $count ) return;
-		
-		foreach ( $matches as $image ) {
-			// SRC de l'image = $image[1]
-			$attachment_id = $this->import_image( $image[1], $post_id );
-			if ( $attachment_id > 0 ) {
-				$new_img_url = wp_get_attachment_url( $attachment_id );
-				$content = str_replace( $image[1], $new_img_url, $content );
-			}
+	protected function set_featured_image( $image_url, $post_id ) {
+		$id_attachment = $this->import_image( $image_url, $post_id );
+		if ( ! is_wp_error( $id_attachment ) ) {
+			set_post_thumbnail( $post_id, $id_attachment );
 		}
-		wp_update_post([
-			'ID'    => $post_id,
-			'post_content'  => $content
-		]);
-		return;
-	}
-	
-	private function transfrom_img_src( $args ) {
-		$extensions_to_import = apply_filters( 'rsjg_images_extensions', [
-			'jpg',
-			'png',
-			'gif',
-			'jpeg',
-			'webp',
-		] );
-		
-		$patten_image = '#[^\'"](https?://.*[\.](?:' . implode( '|', $extensions_to_import ) . '))[^\'"]#i';
-		preg_match_all( $patten_image, $args['post_content'], $matches, PREG_SET_ORDER );
-		$image_format_html = "<img class=\"aligncenter\" src=\"%s\">";
-		
-		foreach ( $matches as $image ) {
-			$img_html = sprintf( $image_format_html, $image[1] );
-			$args['post_content'] = str_replace( $image[0], $img_html, $args['post_content'] );
-		}
-		
-		return $args;
 	}
 	
 	/**
+	 * Récupère un post à l'aide de sa meta_key _rsjg_task_id
+	 *
 	 * @param $task_ID
 	 *
 	 * @return bool|\WP_Post
 	 */
-	private function get_post_by_task_id( $task_ID ) {
+	protected function get_post_by_task_id( $task_ID ) {
 		$loop = new \WP_Query( array(
 			'ignore_sticky_posts' => 1,
 			'meta_key'            => '_rsjg_task_id',
@@ -300,20 +393,5 @@ class RSJGWP extends RSJGApiClient {
 		global $post;
 		
 		return $post;
-	}
-	
-	private function get_random_user() {
-		$all_users = get_users();
-		$specific_users = array();
-		
-		$exclude_users = apply_filters( 'rsjg_exclude_random_users', array() );
-		
-		foreach($all_users as $user){
-			
-			if( $user->has_cap('publish_posts') && !in_array( $user->ID, $exclude_users ) ){
-				$specific_users[] = $user;
-			}
-		}
-		return $specific_users[ array_rand( $specific_users ) ];
 	}
 }
