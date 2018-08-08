@@ -2,6 +2,9 @@
 Contributors: DoudouMoii
 Tags: seo, redaction
 Requires at least: 4.7
+Tested up to: 4.8
+Requires PHP: 5.6
+Stable tag: stable
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,17 +14,6 @@ Ce plugin vous permet de publier vos textes depuis la plateforme Redacteur.site
 
 Ce plugin vous permet de publier vos textes depuis la plateforme Redacteur.site
 Il utilise comme base le plugin de la plateforme Soumettre.fr
-
-
-== Installation ==
-
-1. Upload the plugin files to the `/wp-content/plugins/redacteur-autopublish` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
-1. Create your account on https://redacteur.site/
-1. Go to your User Profile and get your API credentials
-1. Use the Autopublish menu to sync with Redacteur.site
-
-== FAQ ==
 
 = Filtres =
 
@@ -76,6 +68,18 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
   }
   add_action( 'rsjg_post_created', 'send_mail_autopublish', 10, 1 );
   ```
+
+== Installation ==
+
+1. Upload the plugin files to the `/wp-content/plugins/redacteur-autopublish` directory, or install the plugin through the WordPress plugins screen directly.
+1. Activate the plugin through the 'Plugins' screen in WordPress
+1. Create your account on https://redacteur.site/
+1. Go to your User Profile and get your API credentials
+1. Use the Autopublish menu to sync with Redacteur.site
+
+== Screenshots ==
+
+
 
 == Changelog ==
 
