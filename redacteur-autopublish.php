@@ -3,7 +3,7 @@
  * Plugin Name:       Redacteur.site Autopublish
  * Plugin URI:        http://www.redacteur.site/wordpress/
  * Description:       Autopublish from http://www.redacteur.site/
- * Version:           0.3
+ * Version:           0.4
  * Author:            Julien Gadanho
  * Author URI:        https://www.securemydata.fr/
  * License:           GPL-2.0+
@@ -56,6 +56,8 @@ class RSJG_Admin {
 		  __FILE__,
 		  'redacteur-autopublish'
 	  );
+	  
+	  $myUpdateChecker->getVcsApi()->enableReleaseAssets();
 	  
 	  //Optional: Set the branch that contains the stable release.
 	  $myUpdateChecker->setBranch('master');

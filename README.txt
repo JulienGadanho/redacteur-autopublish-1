@@ -31,6 +31,9 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Changelog ==
 
+= 0.4 =
+* Ajout de la possibilité de mettre à jour un clone du repo
+
 = 0.3 =
 * Version stable mais avec les infos locales
 
