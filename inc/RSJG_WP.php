@@ -212,7 +212,7 @@ class RSJGWP extends RSJGApiClient {
 		/**
 		 * Permet de modifier les paramètres
 		 */
-		$post_arr = apply_filters( 'rsjg_instert_post_args', $post_arr );
+		$post_arr = apply_filters( 'rsjg_insert_post_args', $post_arr );
 		
 		$post_ID = wp_insert_post( $post_arr );
 		

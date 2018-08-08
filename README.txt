@@ -5,29 +5,77 @@ Requires at least: 4.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin allows website to publish text from redacteur.site
+Ce plugin vous permet de publier vos textes depuis la plateforme Redacteur.site
 
 == Description ==
 
-This plugin allows you to register your blog on Soumettre.fr
+Ce plugin vous permet de publier vos textes depuis la plateforme Redacteur.site
+Il utilise comme base le plugin de la plateforme Soumettre.fr
 
-Once it's done, we will be able to send you fresh content (including sponsored links) and we will pay you for it.
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/soumettre-wp-partner` directory, or install the plugin through the WordPress plugins screen directly.
+1. Upload the plugin files to the `/wp-content/plugins/redacteur-autopublish` directory, or install the plugin through the WordPress plugins screen directly.
 1. Activate the plugin through the 'Plugins' screen in WordPress
-1. Create your free account on https://soumettre.fr/
+1. Create your account on https://redacteur.site/
 1. Go to your User Profile and get your API credentials
-1. Use the Settings -> Soumettre Partner configure the plugin
+1. Use the Autopublish menu to sync with Redacteur.site
 
-== Screenshots ==
+== FAQ ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+= Filtres =
+
+* `rsjg_insert_post_args` permet de modifier les arguments de `wp_instert_post` avant la publication de l'article.
+   **Exemple**
+   ```
+   function test_update_args( $args ) {
+
+       $args['post_title'] = "[Publication auto] {$args['post_title']}";
+
+       return $args;
+
+   }
+   add_filter( 'rsjg_insert_post_args', 'test_update_args', 10, 1 );
+   ```
+
+* `rsjg_exclude_random_users` permet d'exclure des utilisateurs de mode aléatoire.
+  **Exemple**
+  ```
+  function test_exclude_rand_users( $users_id ) {
+
+      $users_id[] = 5; // On ne veut pas que l'utilisateur id 5 ne soit dans la liste des publication
+      return $users_id;
+
+  }
+  add_filter( 'rsjg_exclude_random_users', 'test_exclude_rand_users', 10, 1 );
+  ```
+
+* `rsjg_images_extensions` permet de modifier la liste des extensions autorisées pour les images.
+  **Exemple**
+  ```
+  function test_add_raw_img( $extensions ) {
+
+      $extensions[] = "raw"
+      return $extensions;
+
+  }
+  add_filter( 'rsjg_images_extensions', 'test_add_raw_img', 10, 1 );
+  ```
+
+
+= Actions =
+
+* `rsjg_post_created` permet d'effectuer une action à la publication effective de l'article. Avant l'import des images
+  **Exemple**
+  ```
+  function send_mail_autopublish( $post_id ) {
+
+      $post = get_post( $post_id );
+      wp_mail( "john@example.com", "Publication d'un article", "Publication de l'article $post->post_title sur " . get_permalink( $post->ID ) );
+
+  }
+  add_action( 'rsjg_post_created', 'send_mail_autopublish', 10, 1 );
+  ```
 
 == Changelog ==
 
