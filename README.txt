@@ -18,7 +18,9 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
 = Filtres =
 
 * `rsjg_insert_post_args` permet de modifier les arguments de `wp_instert_post` avant la publication de l'article.
+
    **Exemple**
+
    ~~~
    function test_update_args( $args ) {
 
@@ -31,7 +33,9 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
    ~~~
 
 * `rsjg_exclude_random_users` permet d'exclure des utilisateurs de mode aléatoire.
+
   **Exemple**
+
   ~~~
   function test_exclude_rand_users( $users_id ) {
 
@@ -43,7 +47,9 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
   ~~~
 
 * `rsjg_images_extensions` permet de modifier la liste des extensions autorisées pour les images.
+
   **Exemple**
+
   ~~~
   function test_add_raw_img( $extensions ) {
 
@@ -58,7 +64,9 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
 = Actions =
 
 * `rsjg_post_created` permet d'effectuer une action à la publication effective de l'article. Avant l'import des images
+
   **Exemple**
+  
   ~~~
   function send_mail_autopublish( $post_id ) {
 
