@@ -2,7 +2,7 @@
 Contributors: DoudouMoii
 Tags: seo, redaction
 Requires at least: 4.7
-Tested up to: 4.8
+Tested up to: 4.9.8
 Requires PHP: 5.6
 Stable tag: stable
 License: GPLv2 or later
@@ -19,7 +19,7 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
 
 * `rsjg_insert_post_args` permet de modifier les arguments de `wp_instert_post` avant la publication de l'article.
    **Exemple**
-   ```
+   ~~~
    function test_update_args( $args ) {
 
        $args['post_title'] = "[Publication auto] {$args['post_title']}";
@@ -28,7 +28,7 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
 
    }
    add_filter( 'rsjg_insert_post_args', 'test_update_args', 10, 1 );
-   ```
+   ~~~
 
 * `rsjg_exclude_random_users` permet d'exclure des utilisateurs de mode aléatoire.
   **Exemple**
