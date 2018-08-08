@@ -32,7 +32,7 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
 
 * `rsjg_exclude_random_users` permet d'exclure des utilisateurs de mode aléatoire.
   **Exemple**
-  ```
+  ~~~
   function test_exclude_rand_users( $users_id ) {
 
       $users_id[] = 5; // On ne veut pas que l'utilisateur id 5 ne soit dans la liste des publication
@@ -40,11 +40,11 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
 
   }
   add_filter( 'rsjg_exclude_random_users', 'test_exclude_rand_users', 10, 1 );
-  ```
+  ~~~
 
 * `rsjg_images_extensions` permet de modifier la liste des extensions autorisées pour les images.
   **Exemple**
-  ```
+  ~~~
   function test_add_raw_img( $extensions ) {
 
       $extensions[] = "raw"
@@ -52,14 +52,14 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
 
   }
   add_filter( 'rsjg_images_extensions', 'test_add_raw_img', 10, 1 );
-  ```
+  ~~~
 
 
 = Actions =
 
 * `rsjg_post_created` permet d'effectuer une action à la publication effective de l'article. Avant l'import des images
   **Exemple**
-  ```
+  ~~~
   function send_mail_autopublish( $post_id ) {
 
       $post = get_post( $post_id );
@@ -67,7 +67,7 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
 
   }
   add_action( 'rsjg_post_created', 'send_mail_autopublish', 10, 1 );
-  ```
+  ~~~
 
 == Installation ==
 
