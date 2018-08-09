@@ -26,6 +26,7 @@ class RSJGWP extends RSJGApiClient {
 	protected $available_services = array(
 		'authors',
 		'categories',
+		'image_size',
 		'post',
 	);
 	
@@ -199,6 +200,32 @@ class RSJGWP extends RSJGApiClient {
 		
 		echo json_encode($ret);
 	}
+	
+	/**
+	 * Envoie les différentes tailles d'image
+	 */
+	public function image_size() {
+		global $_wp_additional_image_sizes;
+		
+		$sizes = array();
+		
+		foreach ( get_intermediate_image_sizes() as $_size ) {
+			if ( in_array( $_size, array('thumbnail', 'medium', 'medium_large', 'large') ) ) {
+				$sizes[ $_size ]['width']  = get_option( "{$_size}_size_w" );
+				$sizes[ $_size ]['height'] = get_option( "{$_size}_size_h" );
+				$sizes[ $_size ]['crop']   = (bool) get_option( "{$_size}_crop" );
+			} elseif ( isset( $_wp_additional_image_sizes[ $_size ] ) ) {
+				$sizes[ $_size ] = array(
+					'width'  => $_wp_additional_image_sizes[ $_size ]['width'],
+					'height' => $_wp_additional_image_sizes[ $_size ]['height'],
+					'crop'   => $_wp_additional_image_sizes[ $_size ]['crop'],
+				);
+			}
+		}
+		
+		echo json_encode($sizes);
+	}
+	
 	
 	/**
 	 * Créé un post
