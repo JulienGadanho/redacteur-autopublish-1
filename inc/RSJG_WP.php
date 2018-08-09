@@ -24,7 +24,7 @@ class RSJGWP extends RSJGApiClient {
 	 * @var array
 	 */
 	protected $available_services = array(
-		'authors',      // A venir
+		'authors',
 		'categories',
 		'post',
 	);
@@ -176,6 +176,28 @@ class RSJGWP extends RSJGApiClient {
 			$ret[] = array( 'id' => $category->term_id, 'text' => $category->name, 'parent' => $category->parent );
 		}
 		echo json_encode( $ret );
+	}
+	
+	/**
+	 * Envoie la liste des auteurs
+	 */
+	public function authors() {
+		$ret = [];
+		
+		$users = get_users();
+		$exclude_users = apply_filters( 'rsjg_exclude_random_users', array() );
+		
+		foreach ( $users as $user ) {
+			if ( $user->has_cap( 'publish_posts' ) && ! in_array( $user->ID, $exclude_users ) ) {
+				$ret[] = [
+					'id' => $user->ID,
+					'user_login'    => $user->user_login,
+					'user_nicename' => $user->user_nicename,
+				];
+			}
+		}
+		
+		echo json_encode($ret);
 	}
 	
 	/**
