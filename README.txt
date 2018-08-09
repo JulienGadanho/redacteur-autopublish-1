@@ -66,7 +66,7 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
 * `rsjg_post_created` permet d'effectuer une action à la publication effective de l'article. Avant l'import des images
 
   **Exemple**
-  
+
   ~~~
   function send_mail_autopublish( $post_id ) {
 
@@ -90,6 +90,9 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
 
 
 == Changelog ==
+
+= 0.6 =
+* Ajout des auteurs à l'API
 
 = 0.5 =
 * Test update du clone du repo
