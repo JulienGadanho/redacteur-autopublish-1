@@ -1,7 +1,6 @@
 <?php
 /**
  * Plugin Name:       Redacteur.site Autopublish
- * Plugin URI:        http://www.redacteur.site/wordpress/
  * Description:       Autopublish from http://www.redacteur.site/
  * Version:           0.6
  * Author:            Etienne Mommalier
