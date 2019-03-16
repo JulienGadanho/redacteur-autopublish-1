@@ -94,7 +94,7 @@ class RSJGApiClient {
 	 * @param string $url URL de la homepage du site.
 	 */
 	public function site_add( $url ) {
-		$res = $this->request( 'site/register', array( 'site' => $url ) );
+		$res = $this->request( 'site/register/', array( 'site' => $url ) );
 		echo $res['data'];
 		die();
 	}

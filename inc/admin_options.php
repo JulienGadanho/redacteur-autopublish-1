@@ -14,7 +14,7 @@ if ( ! $plugin_url ) {
 
 $plateform_link = sprintf( '<a href="http://redacteur.site" target="_blank" rel="noreferrer noopener">%1$s</a>', esc_html_x( 'Redacteur.site', 'Plateform name', 'redacteur-autopublish' ) );
 
-$profile_link = sprintf( '<a href="http://redacteur.site/profile/" target="_blank" rel="noreferrer noopener">%1$s</a>', esc_html__( 'Get my API credentials', 'redacteur-autopublish' ) );
+$profile_link = sprintf( '<a href="http://redacteur.site/api/" target="_blank" rel="noreferrer noopener">%1$s</a>', esc_html__( 'Get my API credentials', 'redacteur-autopublish' ) );
 
 
 ?>

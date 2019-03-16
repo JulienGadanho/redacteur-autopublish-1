@@ -51,7 +51,7 @@ class RSJG_Admin {
 	   */
 	  require plugin_dir_path( __FILE__ ) . 'lib/plugin-update-checker/plugin-update-checker.php';
 	  $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-		  'https://github.com/DoudouMoii/redacteur-autopublish/',
+		  'https://github.com/JulienGadanho/redacteur-autopublish-1/',
 		  __FILE__,
 		  'redacteur-autopublish'
 	  );
