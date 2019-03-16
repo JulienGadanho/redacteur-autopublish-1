@@ -3,7 +3,7 @@
 use RSJG\Exceptions\SignatureInvalideException;
 
 class RSJGApiClient {
-	protected $endpoint = 'http://redacteur.local/api/';
+	protected $endpoint = 'http://redacteur.site/api-v2/';
 	protected $email;
 	protected $api_key;
 	protected $api_secret;
@@ -56,7 +56,6 @@ class RSJGApiClient {
 		curl_setopt( $ch, CURLOPT_URL, $endpoint );
 		curl_setopt( $ch, CURLOPT_POSTFIELDS, $post_params );
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		//        curl_setopt($ch, CURLOPT_REFERER, 'https://soumettre.fr/');
 		curl_setopt( $ch, CURLOPT_USERAGENT, 'RSJGApi' );
 		
 		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, 30 );
