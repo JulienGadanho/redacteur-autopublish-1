@@ -51,7 +51,7 @@ class RSJGWP extends RSJGApiClient {
 		parent::__construct();
 		
 		//        $this->endpoint = 'http://redacteur.site/api/';
-		$this->endpoint = 'http://redacteur.site/api-v2/';
+		$this->endpoint = 'http://www.redacteur.site/api-v2/';
 		
 		$this->wp_set_credentials();
 		
