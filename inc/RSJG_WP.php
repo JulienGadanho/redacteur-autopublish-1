@@ -137,7 +137,7 @@ class RSJGWP extends RSJGApiClient {
 			$params['endpoint'] = $endpoint;
 		}
 		
-		$res = $this->request( 'sites', $params );
+		$res = $this->request( 'site/register/', $params );
 		
 		return $res;
 	}
@@ -151,6 +151,7 @@ class RSJGWP extends RSJGApiClient {
 	 * @return array|mixed|object
 	 */
 	public function request( $service, $post_params = array() ) {
+
 		$endpoint    = $this->endpoint . $service;
 		$post_params = $this->sign( $service, $post_params );
 		

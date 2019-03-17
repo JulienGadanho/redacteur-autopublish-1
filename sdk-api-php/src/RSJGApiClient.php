@@ -48,6 +48,7 @@ class RSJGApiClient {
 	 * @return object Réponse en JSON
 	 */
 	public function request( $service, $post_params = array() ) {
+		
 		$endpoint    = $this->endpoint . $service;
 		$post_params = $this->sign( $service, $post_params );
 		
@@ -93,7 +94,8 @@ class RSJGApiClient {
 	 *
 	 * @param string $url URL de la homepage du site.
 	 */
-	public function site_add( $url ) {
+	public function site_add( $url ) 
+	{
 		$res = $this->request( 'site/register/', array( 'site' => $url ) );
 		echo $res['data'];
 		die();

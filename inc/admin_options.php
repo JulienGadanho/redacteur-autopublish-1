@@ -12,9 +12,9 @@ if ( ! $plugin_url ) {
 	$plugin_url = $this->plugin_url;
 }
 
-$plateform_link = sprintf( '<a href="http://redacteur.site" target="_blank" rel="noreferrer noopener">%1$s</a>', esc_html_x( 'Redacteur.site', 'Plateform name', 'redacteur-autopublish' ) );
+$plateform_link = sprintf( '<a href="http://www.redacteur.site" target="_blank" rel="noreferrer noopener">%1$s</a>', esc_html_x( 'Redacteur.site', 'Plateform name', 'redacteur-autopublish' ) );
 
-$profile_link = sprintf( '<a href="http://redacteur.site/api/" target="_blank" rel="noreferrer noopener">%1$s</a>', esc_html__( 'Get my API credentials', 'redacteur-autopublish' ) );
+$profile_link = sprintf( '<a href="http://www.redacteur.site/api/" target="_blank" rel="noreferrer noopener">%1$s</a>', esc_html__( 'Get my API credentials', 'redacteur-autopublish' ) );
 
 
 ?>
@@ -46,7 +46,7 @@ $profile_link = sprintf( '<a href="http://redacteur.site/api/" target="_blank" r
 			</td>
 		</tr>
 		<tr valign="top">
-			<th scope="row"><?php echo esc_html_x( 'API Key', 'Form label', 'redacteur-autopublish' ); ?></th>
+			<th scope="row"><?php echo esc_html_x( 'User ID', 'Form label', 'redacteur-autopublish' ); ?></th>
 			<td>
 				<input type="text" title="<?php esc_attr_e( 'Your API key', 'redacteur-autopublish' ) ?>" id="rsjg_api_key" name="api_key" value="<?= esc_attr( $api_key ); ?>" <?php if ( defined( 'RSJG_API_KEY' ) ) echo 'disabled'; ?> class="regular-text ltr"/>
 			</td>
