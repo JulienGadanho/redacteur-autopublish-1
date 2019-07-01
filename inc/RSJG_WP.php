@@ -128,6 +128,7 @@ class RSJGWP extends RSJGApiClient {
 	 * @return array|mixed|object
 	 */
 	public function site_add( $url = null, $cms = null, $endpoint = null ) {
+
 		$params = array(
 			'url' => $url,
 			'cms' => $cms
@@ -240,12 +241,20 @@ class RSJGWP extends RSJGApiClient {
 		} else {
 			$post_status = 'publish';
 		}
+
+		if ( isset( $params['post_date'] ) ) {
+			$post_date = $params['post_date'];
+			$post_status = 'future';
+		} else {
+			$post_date = date('Y-m-d H:i:s');
+		}
 		
 		$post_content = $params['content'];
 		
 		
 		$post_arr = array(
 			'post_status'   => $post_status,
+			'post_date'		=> $post_date,
 			'post_title'    => $params['title'],
 			'post_content'  => $post_content,
 			'post_category' => array( $params['category'] ),
