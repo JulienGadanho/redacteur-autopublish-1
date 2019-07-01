@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Redacteur.site Autopublish
  * Description:       Autopublish from http://www.redacteur.site/
- * Version:           0.6
+ * Version:           0.7
  * Author:            Etienne Mommalier
  * Author URI:        https://etienne-mommalier.fr/
  * License:           GPL-2.0+
