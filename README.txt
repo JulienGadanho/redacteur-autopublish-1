@@ -91,6 +91,9 @@ Il utilise comme base le plugin de la plateforme Soumettre.fr
 
 == Changelog ==
 
+= 0.7 =
+* Programmation des articles
+
 = 0.6 =
 * Ajout des auteurs à l'API
 
